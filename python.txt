@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+import random
+import argparse
+
+# Listas de nomes (pode adicionar/editar como quiser)
+male_first = ["Miguel", "Arthur", "Pedro", "Lucas", "Matheus", "Gabriel", "Rafael", "Daniel", "Bruno", "Thiago", "Henrique", "Eduardo", "Rodrigo", "Samuel", "Jorge"]
+female_first = ["Maria", "Ana", "Júlia", "Isabella", "Beatriz", "Laura", "Luiza", "Camila", "Sofia", "Valentina", "Mariana", "Renata", "Carolina", "Fernanda", "Luana"]
+unisex_first = ["Alex", "Sam", "Chris", "Toni", "Ariel", "Noah", "Taylor", "Morgan"]
+surnames = ["Silva", "Souza", "Oliveira", "Santos", "Pereira", "Lima", "Rodrigues", "Almeida", "Costa", "Ribeiro", "Carvalho", "Gomes", "Martins", "Araújo", "Nunes", "Melo", "Barros", "Pinto", "Teixeira", "Fernandes", "Azevedo", "Moreira", "Rocha"]
+
+def rand_name(gender="a"):
+    if gender == "m":
+        first = random.choice(male_first)
+    elif gender == "f":
+        first = random.choice(female_first)
+    else:  # aleatório
+        r = random.randint(0, 100)
+        if r < 45:
+            first = random.choice(male_first)
+        elif r < 90:
+            first = random.choice(female_first)
+        else:
+            first = random.choice(unisex_first)
+    last = random.choice(surnames)
+    return f"{first} {last}"
+
+def main():
+    parser = argparse.ArgumentParser(description="Gerador de nomes")
+    parser.add_argument("-c", "--count", type=int, default=10, help="Quantidade de nomes (padrão 10)")
+    parser.add_argument("-g", "--gender", choices=["m", "f", "a"], default="a", help="Gênero: m = masculino, f = feminino, a = aleatório")
+    parser.add_argument("-o", "--output", type=str, help="Salvar em arquivo .txt")
+    args = parser.parse_args()
+
+    generated = set()
+    while len(generated) < args.count:
+        generated.add(rand_name(args.gender))
+
+    for name in generated:
+        print(name)
+
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as f:
+            for name in generated:
+                f.write(name + "\n")
+        print(f"\n✅ Nomes salvos em {args.output}")
+
+if __name__ == "__main__":
+    main()
